@@ -3,6 +3,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Highlight,
   ListItem,
   Text,
   Tooltip,
@@ -59,19 +60,32 @@ const Home: NextPage = () => {
         <Divider />
         {expenseList.map((expense) => (
           <Flex key={expense.id} w="100%" flexDir="column">
-            <Heading display="flex" fontSize="2xl" mb="1rem">
+            <Heading fontSize="2xl" mb="1rem">
               {expense.expenseName} = &nbsp;
-              <Text color="#C39A47">{formatToBRL(expense.total)}</Text>
+              <Highlight
+                query={formatToBRL(expense.total)}
+                styles={{ color: "#C39A47" }}
+              >
+                {formatToBRL(expense.total)}
+              </Highlight>
             </Heading>
             <UnorderedList fontWeight="medium" mb="1.5rem">
-              <Flex>
-                <ListItem mb="0.5rem">Esther -&gt;</ListItem>&nbsp;
-                <Text color="#59936D">{formatToBRL(expense.esther)}</Text>
-              </Flex>
-              <Flex>
-                <ListItem>Gustavo -&gt;</ListItem>&nbsp;
-                <Text color="#59936D">{formatToBRL(expense.gustavo)}</Text>
-              </Flex>
+              <ListItem mb="0.5rem">
+                <Highlight
+                  query={formatToBRL(expense.esther)}
+                  styles={{ color: "#59936D" }}
+                >
+                  {`Esther -> ${formatToBRL(expense.esther)}`}
+                </Highlight>
+              </ListItem>
+              <ListItem>
+                <Highlight
+                  query={formatToBRL(expense.gustavo)}
+                  styles={{ color: "#59936D" }}
+                >
+                  {`Gustavo -> ${formatToBRL(expense.gustavo)}`}
+                </Highlight>
+              </ListItem>
             </UnorderedList>
             <Divider />
           </Flex>
