@@ -66,7 +66,7 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
   };
 
   return (
-    <Modal {...rest}>
+    <Modal {...rest} size={["full", "md"]} motionPreset={"slideInBottom"}>
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit as any)}>
