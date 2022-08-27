@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.2.9",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "date-fns": "^2.29.2",
     "framer-motion": "^6",
     "i18next": "^21.9.1",
     "next": "12.2.5",
