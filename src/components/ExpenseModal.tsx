@@ -19,9 +19,11 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ExpenseDTO, useExpenseStore } from "../store";
 
 export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
   const [_, setExpenses] = useLocalStorage("expenseList", []);
+  const { addExpense } = useExpenseStore();
 
   const schema = yup
     .object({
@@ -43,7 +45,7 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
     (percentage * amount) / 100;
 
   const onSubmit = ({ name, amount }: { name: string; amount: number }) => {
-    const expense = {
+    const expense: ExpenseDTO = {
       id: crypto.randomUUID(),
       total: amount,
       expenseName: name,
@@ -51,6 +53,7 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
       gustavo: getValuePercentage(amount, 75),
     };
 
+    addExpense(expense);
     setExpenses((prevState) => [...prevState, expense] as any);
 
     reset({

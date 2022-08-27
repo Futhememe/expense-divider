@@ -1,13 +1,38 @@
-import { Button, Heading, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  ListItem,
+  Text,
+  Tooltip,
+  UnorderedList,
+  useDisclosure,
+} from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Container } from "../components/Container";
 import { Main } from "../components/Main";
 import { Percentage } from "../components/Percentage";
 import { ExpenseModal } from "../components/ExpenseModal";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ExpenseDTO, useExpenseStore } from "../store";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
+  const { setAllExpenses, expenseList } = useExpenseStore();
+
+  const formatToBRL = (amount: number) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(amount);
+
+  useEffect(() => {
+    setAllExpenses(storageList);
+  }, [storageList]);
 
   return (
     <Container>
@@ -31,6 +56,26 @@ const Home: NextPage = () => {
             + lançamento
           </Button>
         </Tooltip>
+        <Divider />
+        {expenseList.map((expense) => (
+          <Flex key={expense.id} w="100%" flexDir="column">
+            <Heading display="flex" fontSize="2xl" mb="1rem">
+              {expense.expenseName} = &nbsp;
+              <Text color="#C39A47">{formatToBRL(expense.total)}</Text>
+            </Heading>
+            <UnorderedList fontWeight="medium" mb="1.5rem">
+              <Flex>
+                <ListItem mb="0.5rem">Esther -&gt;</ListItem>&nbsp;
+                <Text color="#59936D">{formatToBRL(expense.esther)}</Text>
+              </Flex>
+              <Flex>
+                <ListItem>Gustavo -&gt;</ListItem>&nbsp;
+                <Text color="#59936D">{formatToBRL(expense.gustavo)}</Text>
+              </Flex>
+            </UnorderedList>
+            <Divider />
+          </Flex>
+        ))}
       </Main>
     </Container>
   );
