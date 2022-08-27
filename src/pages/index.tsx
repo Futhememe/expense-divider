@@ -1,10 +1,14 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import { Button, Heading, Tooltip, useDisclosure } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Container } from "../components/Container";
 import { Main } from "../components/Main";
+import { Percentage } from "../components/Percentage";
+import { ExpenseModal } from "../components/ExpenseModal";
 
 const Home: NextPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Container>
       <Head>
@@ -15,7 +19,19 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Main></Main>
+      <ExpenseModal isOpen={isOpen} onClose={onClose} />
+      <Main>
+        <Heading textAlign="center">Lançamentos</Heading>
+        <Percentage />
+        <Tooltip
+          placement="bottom"
+          label="Clique aqui para adicionar um novo lançamento"
+        >
+          <Button w="100%" colorScheme="green" onClick={onOpen}>
+            + lançamento
+          </Button>
+        </Tooltip>
+      </Main>
     </Container>
   );
 };
