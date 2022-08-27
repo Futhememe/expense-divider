@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.2.9",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@hookform/resolvers": "^2.9.7",
     "date-fns": "^2.29.2",
     "framer-motion": "^6",
     "i18next": "^21.9.1",
@@ -19,7 +20,9 @@
     "ni18n": "^1.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-i18next": "^11.18.5"
+    "react-hook-form": "^7.34.2",
+    "react-i18next": "^11.18.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.7.13",
