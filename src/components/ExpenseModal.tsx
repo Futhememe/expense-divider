@@ -36,13 +36,24 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const getValuePercentage = (amount: number, percentage: number) =>
+    (percentage * amount) / 100;
+
+  const onSubmit = ({ name, amount }: { name: string; amount: number }) => {
+    const expense = {
+      total: amount,
+      expenseName: name,
+      esther: getValuePercentage(amount, 25),
+      gustavo: getValuePercentage(amount, 75),
+    };
+    console.log(expense);
+  };
 
   return (
     <Modal {...rest}>
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit as any)}>
           <ModalHeader>Nova Despesa</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
