@@ -18,8 +18,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
+  const [_, setExpenses] = useLocalStorage("expenseList", []);
+
   const schema = yup
     .object({
       name: yup.string().required(),
@@ -41,12 +44,22 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
 
   const onSubmit = ({ name, amount }: { name: string; amount: number }) => {
     const expense = {
+      id: crypto.randomUUID(),
       total: amount,
       expenseName: name,
       esther: getValuePercentage(amount, 25),
       gustavo: getValuePercentage(amount, 75),
     };
-    console.log(expense);
+
+    setExpenses((prevState) => [...prevState, expense] as any);
+
+    reset({
+      data: {
+        name: "",
+        amount: 0,
+      },
+    });
+    rest.onClose();
   };
 
   return (
