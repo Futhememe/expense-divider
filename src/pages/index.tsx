@@ -4,6 +4,7 @@ import {
   Flex,
   Heading,
   Highlight,
+  IconButton,
   ListItem,
   Text,
   Tooltip,
@@ -18,12 +19,20 @@ import { Percentage } from "../components/Percentage";
 import { ExpenseModal } from "../components/ExpenseModal";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { ExpenseDTO, useExpenseStore } from "../store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteModal } from "../components/DeleteModal";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
   const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
   const { setAllExpenses, expenseList } = useExpenseStore();
+  const [selectedExpense, setSelectedExpense] = useState<string | null>(null);
 
   const formatToBRL = (amount: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -45,6 +54,11 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <DeleteModal
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        expenseId={selectedExpense ?? ""}
+      />
       <ExpenseModal isOpen={isOpen} onClose={onClose} />
       <Main>
         <Heading textAlign="center">Lançamentos</Heading>
@@ -60,15 +74,33 @@ const Home: NextPage = () => {
         <Divider />
         {expenseList.map((expense) => (
           <Flex key={expense.id} w="100%" flexDir="column">
-            <Heading fontSize="2xl" mb="1rem">
-              {expense.expenseName} = &nbsp;
-              <Highlight
-                query={formatToBRL(expense.total)}
-                styles={{ color: "#C39A47" }}
-              >
-                {formatToBRL(expense.total)}
-              </Highlight>
-            </Heading>
+            <Flex justifyContent="space-between">
+              <Heading fontSize="2xl" mb="1rem">
+                {expense.expenseName} = &nbsp;
+                <Highlight
+                  query={formatToBRL(expense.total)}
+                  styles={{ color: "#C39A47" }}
+                >
+                  {formatToBRL(expense.total)}
+                </Highlight>
+              </Heading>
+              <Flex>
+                <IconButton
+                  colorScheme="transparent"
+                  aria-label="edit expense"
+                  icon={<EditIcon />}
+                />
+                <IconButton
+                  colorScheme="transparent"
+                  aria-label="delete expense"
+                  onClick={() => {
+                    onDeleteOpen();
+                    setSelectedExpense(expense.id);
+                  }}
+                  icon={<DeleteIcon />}
+                />
+              </Flex>
+            </Flex>
             <UnorderedList fontWeight="medium" mb="1.5rem">
               <ListItem mb="0.5rem">
                 <Highlight
