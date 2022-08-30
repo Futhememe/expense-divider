@@ -19,11 +19,29 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { ExpenseDTO, useExpenseStore } from "../store";
+import {
+  ExpenseDTO,
+  useExpenseStore,
+  editExpense as generalEditExpense,
+} from "../store";
+import { useEffect } from "react";
 
-export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
-  const [_, setExpenses] = useLocalStorage("expenseList", []);
-  const { addExpense } = useExpenseStore();
+interface ExpenseModalProps extends Omit<ModalProps, "children"> {
+  selectedId?: string;
+  mode?: "edit" | "idle";
+}
+
+export const ExpenseModal = ({
+  mode,
+  selectedId,
+  ...rest
+}: ExpenseModalProps) => {
+  const [storageList, setExpenses] = useLocalStorage<ExpenseDTO[]>(
+    "expenseList",
+    []
+  );
+  const { addExpense, getExpenseById, editExpense, expenseList } =
+    useExpenseStore();
 
   const schema = yup
     .object({
@@ -35,11 +53,26 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
     reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (mode === "edit") {
+      setValue("name", getExpenseById(selectedId ?? "")?.expenseName);
+      setValue("amount", getExpenseById(selectedId ?? "")?.total);
+    } else if (mode === "idle") {
+      reset({
+        data: {
+          name: "",
+          amount: 0,
+        },
+      });
+    }
+  }, [mode]);
 
   const getValuePercentage = (amount: number, percentage: number) =>
     (percentage * amount) / 100;
@@ -53,8 +86,13 @@ export const ExpenseModal = ({ ...rest }: Omit<ModalProps, "children">) => {
       gustavo: getValuePercentage(amount, 75),
     };
 
-    addExpense(expense);
-    setExpenses((prevState) => [...prevState, expense] as any);
+    if (mode === "idle") {
+      addExpense(expense);
+      setExpenses((prevState) => [...prevState, expense] as any);
+    } else if (mode === "edit") {
+      editExpense(selectedId ?? "", expense);
+      setExpenses(generalEditExpense(storageList, selectedId ?? "", expense));
+    }
 
     reset({
       data: {

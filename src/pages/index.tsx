@@ -33,6 +33,7 @@ const Home: NextPage = () => {
   const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
   const { setAllExpenses, expenseList } = useExpenseStore();
   const [selectedExpense, setSelectedExpense] = useState<string | null>(null);
+  const [modalMode, setModalMode] = useState<"edit" | "idle">("idle");
 
   const formatToBRL = (amount: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -59,7 +60,12 @@ const Home: NextPage = () => {
         onClose={onDeleteClose}
         expenseId={selectedExpense ?? ""}
       />
-      <ExpenseModal isOpen={isOpen} onClose={onClose} />
+      <ExpenseModal
+        isOpen={isOpen}
+        onClose={onClose}
+        mode={modalMode}
+        selectedId={selectedExpense ?? ""}
+      />
       <Main>
         <Heading textAlign="center">Lançamentos</Heading>
         <Percentage />
@@ -67,7 +73,14 @@ const Home: NextPage = () => {
           placement="bottom"
           label="Clique aqui para adicionar um novo lançamento"
         >
-          <Button w="100%" colorScheme="green" onClick={onOpen}>
+          <Button
+            w="100%"
+            colorScheme="green"
+            onClick={() => {
+              setModalMode("idle");
+              onOpen();
+            }}
+          >
             + lançamento
           </Button>
         </Tooltip>
@@ -89,6 +102,11 @@ const Home: NextPage = () => {
                   colorScheme="transparent"
                   aria-label="edit expense"
                   icon={<EditIcon />}
+                  onClick={() => {
+                    setSelectedExpense(expense.id);
+                    setModalMode("edit");
+                    onOpen();
+                  }}
                 />
                 <IconButton
                   colorScheme="transparent"
