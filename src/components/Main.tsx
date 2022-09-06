@@ -6,7 +6,7 @@ export const Main = (props: StackProps) => (
     width="100%"
     maxWidth="48rem"
     minHeight="100vh"
-    pt="2rem"
+    py="2rem"
     px="1rem"
     alignItems="center"
     {...props}
