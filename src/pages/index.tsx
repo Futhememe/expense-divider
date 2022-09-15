@@ -22,6 +22,9 @@ import { ExpenseDTO, useExpenseStore } from "../store";
 import { useEffect, useState } from "react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { DeleteModal } from "../components/DeleteModal";
+import { formatToBRL } from "../utils/formatters";
+import { TotalSection } from "../components/TotalSection";
+import { Expense } from "../components/Expense";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,18 +37,6 @@ const Home: NextPage = () => {
   const { setAllExpenses, expenseList } = useExpenseStore();
   const [selectedExpense, setSelectedExpense] = useState<string | null>(null);
   const [modalMode, setModalMode] = useState<"edit" | "idle">("idle");
-
-  const formatToBRL = (amount: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(amount);
-
-  const getTotalFromExpenseList = (key: "total" | "esther" | "gustavo") => {
-    return expenseList
-      .map((el) => el[key])
-      .reduce((prev, cur) => prev + cur, 0);
-  };
 
   useEffect(() => {
     setAllExpenses(storageList);
@@ -91,94 +82,24 @@ const Home: NextPage = () => {
           </Button>
         </Tooltip>
         <Divider />
-        <Flex w="100%" flexDir="column">
-          <Flex justifyContent="space-between">
-            <Heading fontSize="2xl" mb="1rem">
-              Total = &nbsp;
-              <Highlight
-                query={formatToBRL(getTotalFromExpenseList("total"))}
-                styles={{ color: "#C39A47" }}
-              >
-                {formatToBRL(getTotalFromExpenseList("total"))}
-              </Highlight>
-            </Heading>
-          </Flex>
-          <UnorderedList fontWeight="medium" mb="1.5rem">
-            <ListItem mb="0.5rem">
-              <Highlight
-                query={formatToBRL(getTotalFromExpenseList("esther"))}
-                styles={{ color: "#59936D" }}
-              >
-                {`Esther -> ${formatToBRL(getTotalFromExpenseList("esther"))}`}
-              </Highlight>
-            </ListItem>
-            <ListItem>
-              <Highlight
-                query={formatToBRL(getTotalFromExpenseList("gustavo"))}
-                styles={{ color: "#59936D" }}
-              >
-                {`Gustavo -> ${formatToBRL(
-                  getTotalFromExpenseList("gustavo")
-                )}`}
-              </Highlight>
-            </ListItem>
-          </UnorderedList>
-          <Divider />
-        </Flex>
+        <TotalSection />
         {expenseList.map((expense) => (
-          <Flex key={expense.id} w="100%" flexDir="column">
-            <Flex justifyContent="space-between">
-              <Heading fontSize="2xl" mb="1rem">
-                {expense.expenseName} = &nbsp;
-                <Highlight
-                  query={formatToBRL(expense.total)}
-                  styles={{ color: "#C39A47" }}
-                >
-                  {formatToBRL(expense.total)}
-                </Highlight>
-              </Heading>
-              <Flex>
-                <IconButton
-                  colorScheme="transparent"
-                  aria-label="edit expense"
-                  icon={<EditIcon />}
-                  onClick={() => {
-                    setSelectedExpense(expense.id);
-                    setModalMode("edit");
-                    onOpen();
-                  }}
-                />
-                <IconButton
-                  colorScheme="transparent"
-                  aria-label="delete expense"
-                  onClick={() => {
-                    onDeleteOpen();
-                    setSelectedExpense(expense.id);
-                  }}
-                  icon={<DeleteIcon />}
-                />
-              </Flex>
-            </Flex>
-            <UnorderedList fontWeight="medium" mb="1.5rem">
-              <ListItem mb="0.5rem">
-                <Highlight
-                  query={formatToBRL(expense.esther)}
-                  styles={{ color: "#59936D" }}
-                >
-                  {`Esther -> ${formatToBRL(expense.esther)}`}
-                </Highlight>
-              </ListItem>
-              <ListItem>
-                <Highlight
-                  query={formatToBRL(expense.gustavo)}
-                  styles={{ color: "#59936D" }}
-                >
-                  {`Gustavo -> ${formatToBRL(expense.gustavo)}`}
-                </Highlight>
-              </ListItem>
-            </UnorderedList>
-            <Divider />
-          </Flex>
+          <Expense
+            key={expense.id}
+            name={expense.expenseName}
+            total={expense.total}
+            firstAmount={expense.esther}
+            secondAmount={expense.gustavo}
+            onClickEdit={() => {
+              setSelectedExpense(expense.id);
+              setModalMode("edit");
+              onOpen();
+            }}
+            onClickDelete={() => {
+              onDeleteOpen();
+              setSelectedExpense(expense.id);
+            }}
+          />
         ))}
       </Main>
     </Container>
