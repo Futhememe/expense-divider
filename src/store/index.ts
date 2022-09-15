@@ -4,8 +4,8 @@ export interface ExpenseDTO {
   id: string;
   expenseName: string;
   total: number;
-  esther: number;
-  gustavo: number;
+  firstAmount: number;
+  secondAmount: number;
 }
 
 interface IExpense {
