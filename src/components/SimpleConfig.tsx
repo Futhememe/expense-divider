@@ -1,6 +1,8 @@
 import {
   Button,
+  Divider,
   FormControl,
+  FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
@@ -24,8 +26,10 @@ interface SimpleConfigModalProps extends Omit<ModalProps, "children"> {}
 export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
   const schema = yup
     .object({
-      name: yup.string().required(),
-      amount: yup.number().required(),
+      firstName: yup.string().required(),
+      firstPerc: yup.number().max(100).required(),
+      secondName: yup.string().required(),
+      secondPerc: yup.number().max(100).required(),
     })
     .required();
 
@@ -53,23 +57,31 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
               Configure suas preferencias para separar suas contas com seu
               parceiro
             </Text>
-            <Stack margin={4} />
-            <Text>🚧 em breve</Text>
-            {/* <Stack spacing={4}>
+            <Stack margin={2} />
+            <Text>
+              Caso você queira saber quanto cada um vai pagar proporcional ao
+              salário de vocês é só apertar no botão abaixo
+            </Text>
+            <Button w="100%" type="button" colorScheme="teal">
+              Dividir por salário
+            </Button>
+            <Stack margin={2} />
+            <Stack spacing={4}>
               <FormControl isInvalid={!!errors.name}>
+                <FormLabel>Sobre você</FormLabel>
                 <Controller
-                  name="name"
+                  name="firstName"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <Input {...field} placeholder="Insira o nome da despesa" />
+                    <Input {...field} placeholder="Insira seu nome" />
                   )}
                 />
               </FormControl>
 
               <FormControl isInvalid={!!errors.amount}>
                 <Controller
-                  name="amount"
+                  name="firstPerc"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -84,13 +96,51 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
                       <Input
                         {...field}
                         type="number"
-                        placeholder="Insira o valor"
+                        placeholder="Insira a porcentagem que você irá pagar"
                       />
                     </InputGroup>
                   )}
                 />
               </FormControl>
-            </Stack> */}
+            </Stack>
+            <Divider marginY={4} />
+            <Stack spacing={4}>
+              <FormControl isInvalid={!!errors.name}>
+                <FormLabel>Sobre seu parceiro[a]</FormLabel>
+                <Controller
+                  name="secondName"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="Insira o nome dele[a]" />
+                  )}
+                />
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.amount}>
+                <Controller
+                  name="secondPerc"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        color="gray.300"
+                        fontSize="1.2em"
+                      >
+                        $
+                      </InputLeftElement>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Insira a porcentagem que ele[a] irá pagar"
+                      />
+                    </InputGroup>
+                  )}
+                />
+              </FormControl>
+            </Stack>
           </ModalBody>
           <ModalFooter>
             <Button
