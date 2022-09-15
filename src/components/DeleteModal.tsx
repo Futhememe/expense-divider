@@ -1,9 +1,5 @@
 import {
   Button,
-  FormControl,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,7 +8,6 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
