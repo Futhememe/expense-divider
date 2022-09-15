@@ -2,7 +2,11 @@ import { EditIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Text, Tooltip } from "@chakra-ui/react";
 import { useConfigStore } from "../store";
 
-export const Percentage = () => {
+interface PercentageProps {
+  onClickEdit: () => void;
+}
+
+export const Percentage = ({ onClickEdit }: PercentageProps) => {
   const {
     config: { firstUser, secondUser },
   } = useConfigStore();
@@ -28,7 +32,7 @@ export const Percentage = () => {
           colorScheme="transparent"
           aria-label="edit expense"
           icon={<EditIcon />}
-          onClick={() => {}}
+          onClick={onClickEdit}
         />
       </Flex>
     </Tooltip>

@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { DeleteModal } from "../components/DeleteModal";
 import { TotalSection } from "../components/TotalSection";
 import { Expense } from "../components/Expense";
+import { SimpleConfigModal } from "../components/SimpleConfig";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,6 +25,11 @@ const Home: NextPage = () => {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isConfigOpen,
+    onOpen: onConfigOpen,
+    onClose: onConfigClose,
   } = useDisclosure();
   const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
   const { setAllExpenses, expenseList } = useExpenseStore();
@@ -55,9 +61,10 @@ const Home: NextPage = () => {
         mode={modalMode}
         selectedId={selectedExpense ?? ""}
       />
+      <SimpleConfigModal isOpen={isConfigOpen} onClose={onConfigClose} />
       <Main>
         <Heading textAlign="center">Despesas</Heading>
-        <Percentage />
+        <Percentage onClickEdit={() => onConfigOpen()} />
         <Tooltip
           placement="bottom"
           label="Clique aqui para adicionar um novo lançamento"
