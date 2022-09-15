@@ -85,16 +85,11 @@ export const ExpenseModal = ({
     }
   }, [mode]);
 
-  const getValuePercentage = (amount: number, percentage: number) =>
-    (percentage * amount) / 100;
-
   const onSubmit = ({ name, amount }: { name: string; amount: number }) => {
     const expense: ExpenseDTO = {
       id: crypto.randomUUID(),
       total: amount,
       expenseName: name,
-      firstAmount: getValuePercentage(amount, firstUser.percentage),
-      secondAmount: getValuePercentage(amount, secondUser.percentage),
     };
 
     if (mode === "idle") {

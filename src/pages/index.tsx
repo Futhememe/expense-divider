@@ -12,12 +12,18 @@ import { Main } from "../components/Main";
 import { Percentage } from "../components/Percentage";
 import { ExpenseModal } from "../components/ExpenseModal";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { ExpenseDTO, useExpenseStore } from "../store";
+import {
+  ConfigDTO,
+  ExpenseDTO,
+  useConfigStore,
+  useExpenseStore,
+} from "../store";
 import { useEffect, useState } from "react";
 import { DeleteModal } from "../components/DeleteModal";
 import { TotalSection } from "../components/TotalSection";
 import { Expense } from "../components/Expense";
 import { SimpleConfigModal } from "../components/SimpleConfig";
+import { getValuePercentage } from "../utils/formatters";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +38,11 @@ const Home: NextPage = () => {
     onClose: onConfigClose,
   } = useDisclosure();
   const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
+  const [config] = useLocalStorage<ConfigDTO>("config", {} as any);
+  const {
+    config: { firstUser, secondUser },
+    editConfig,
+  } = useConfigStore();
   const { setAllExpenses, expenseList } = useExpenseStore();
   const [selectedExpense, setSelectedExpense] = useState<string | null>(null);
   const [modalMode, setModalMode] = useState<"edit" | "idle">("idle");
@@ -39,6 +50,10 @@ const Home: NextPage = () => {
   useEffect(() => {
     setAllExpenses(storageList);
   }, [storageList, setAllExpenses]);
+
+  useEffect(() => {
+    editConfig(config);
+  }, [config, editConfig]);
 
   return (
     <Container>
@@ -87,8 +102,14 @@ const Home: NextPage = () => {
             key={expense.id}
             name={expense.expenseName}
             total={expense.total}
-            firstAmount={expense.firstAmount}
-            secondAmount={expense.secondAmount}
+            firstAmount={getValuePercentage(
+              expense.total,
+              firstUser.percentage
+            )}
+            secondAmount={getValuePercentage(
+              expense.total,
+              secondUser.percentage
+            )}
             onClickEdit={() => {
               setSelectedExpense(expense.id);
               setModalMode("edit");

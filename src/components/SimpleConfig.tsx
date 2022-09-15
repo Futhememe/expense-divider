@@ -3,9 +3,11 @@ import {
   Divider,
   FormControl,
   FormLabel,
+  Grid,
+  GridItem,
   Input,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,10 +22,30 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ConfigDTO, useConfigStore } from "../store";
 
 interface SimpleConfigModalProps extends Omit<ModalProps, "children"> {}
+interface ConfigSchema {
+  firstName: string;
+  firstPerc: number;
+  secondName: string;
+  secondPerc: number;
+}
 
 export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
+  const { editConfig } = useConfigStore();
+  const [config, setConfig] = useLocalStorage<ConfigDTO>("config", {
+    firstUser: {
+      name: "Pessoa 1",
+      percentage: 50,
+    },
+    secondUser: {
+      name: "Pessoa 2",
+      percentage: 50,
+    },
+  });
+
   const schema = yup
     .object({
       firstName: yup.string().required(),
@@ -43,10 +65,39 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = ({
+    firstName,
+    firstPerc,
+    secondName,
+    secondPerc,
+  }: ConfigSchema) => {
+    editConfig({
+      firstUser: {
+        name: firstName,
+        percentage: firstPerc,
+      },
+      secondUser: {
+        name: secondName,
+        percentage: secondPerc,
+      },
+    });
+
+    setConfig({
+      firstUser: {
+        name: firstName,
+        percentage: firstPerc,
+      },
+      secondUser: {
+        name: secondName,
+        percentage: secondPerc,
+      },
+    });
+
+    rest.onClose();
+  };
 
   return (
-    <Modal {...rest} size={["full", "md"]} motionPreset={"slideInBottom"}>
+    <Modal {...rest} size={["full", "xl"]} motionPreset={"slideInBottom"}>
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit as any)}>
@@ -62,85 +113,103 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
               Caso você queira saber quanto cada um vai pagar proporcional ao
               salário de vocês é só apertar no botão abaixo
             </Text>
-            <Button w="100%" type="button" colorScheme="teal">
+            <Button mt="1rem" w="100%" type="button" colorScheme="green">
               Dividir por salário
             </Button>
             <Stack margin={2} />
-            <Stack spacing={4}>
-              <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Sobre você</FormLabel>
-                <Controller
-                  name="firstName"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Input {...field} placeholder="Insira seu nome" />
-                  )}
-                />
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.amount}>
-                <Controller
-                  name="firstPerc"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        color="gray.300"
-                        fontSize="1.2em"
-                      >
-                        $
-                      </InputLeftElement>
-                      <Input
-                        {...field}
-                        type="number"
-                        placeholder="Insira a porcentagem que você irá pagar"
-                      />
-                    </InputGroup>
-                  )}
-                />
-              </FormControl>
-            </Stack>
+            <Grid
+              gap={2}
+              templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)"]}
+              alignItems="flex-end"
+            >
+              <GridItem>
+                <FormControl isInvalid={!!errors.firstName}>
+                  <FormLabel>Sobre você</FormLabel>
+                  <Controller
+                    name="firstName"
+                    control={control}
+                    rules={{ required: true }}
+                    defaultValue={config.firstUser.name}
+                    render={({ field }) => (
+                      <Input {...field} placeholder="Insira seu nome" />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl isInvalid={!!errors.firstPerc}>
+                  <Controller
+                    name="firstPerc"
+                    control={control}
+                    rules={{ required: true }}
+                    defaultValue={config.firstUser.percentage}
+                    render={({ field }) => (
+                      <InputGroup>
+                        <InputRightElement
+                          pointerEvents="none"
+                          color="gray.300"
+                          fontSize="1.2em"
+                        >
+                          $
+                        </InputRightElement>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="Porcentagem que você irá pagar"
+                        />
+                      </InputGroup>
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
             <Divider marginY={4} />
-            <Stack spacing={4}>
-              <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Sobre seu parceiro[a]</FormLabel>
-                <Controller
-                  name="secondName"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Input {...field} placeholder="Insira o nome dele[a]" />
-                  )}
-                />
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.amount}>
-                <Controller
-                  name="secondPerc"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        color="gray.300"
-                        fontSize="1.2em"
-                      >
-                        $
-                      </InputLeftElement>
-                      <Input
-                        {...field}
-                        type="number"
-                        placeholder="Insira a porcentagem que ele[a] irá pagar"
-                      />
-                    </InputGroup>
-                  )}
-                />
-              </FormControl>
-            </Stack>
+            <Grid
+              gap={2}
+              templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)"]}
+              alignItems="flex-end"
+            >
+              <GridItem>
+                <FormControl isInvalid={!!errors.secondName}>
+                  <FormLabel>Sobre seu parceiro[a]</FormLabel>
+                  <Controller
+                    name="secondName"
+                    control={control}
+                    rules={{ required: true }}
+                    defaultValue={config.secondUser.name}
+                    render={({ field }) => (
+                      <Input {...field} placeholder="Insira o nome dele[a]" />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl isInvalid={!!errors.secondPerc}>
+                  <Controller
+                    name="secondPerc"
+                    control={control}
+                    rules={{ required: true }}
+                    defaultValue={config.secondUser.percentage}
+                    render={({ field }) => (
+                      <InputGroup>
+                        <InputRightElement
+                          pointerEvents="none"
+                          color="gray.300"
+                          fontSize="1.2em"
+                        >
+                          $
+                        </InputRightElement>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="Porcentagem que ele[a] irá pagar"
+                        />
+                      </InputGroup>
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
           </ModalBody>
           <ModalFooter>
             <Button

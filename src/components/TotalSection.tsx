@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useConfigStore, useExpenseStore } from "../store";
 
-import { formatToBRL } from "../utils/formatters";
+import { formatToBRL, getValuePercentage } from "../utils/formatters";
 
 export const TotalSection = () => {
   const { expenseList } = useExpenseStore();
@@ -16,9 +16,7 @@ export const TotalSection = () => {
     config: { firstUser, secondUser },
   } = useConfigStore();
 
-  const getTotalFromExpenseList = (
-    key: "total" | "firstAmount" | "secondAmount"
-  ) => {
+  const getTotalFromExpenseList = (key: "total") => {
     return expenseList
       .map((el) => el[key])
       .reduce((prev, cur) => prev + cur, 0);
@@ -40,21 +38,37 @@ export const TotalSection = () => {
       <UnorderedList fontWeight="medium" mb="1.5rem">
         <ListItem mb="0.5rem">
           <Highlight
-            query={formatToBRL(getTotalFromExpenseList("firstAmount"))}
+            query={formatToBRL(
+              getValuePercentage(
+                getTotalFromExpenseList("total"),
+                firstUser.percentage
+              )
+            )}
             styles={{ color: "#59936D" }}
           >
             {`${firstUser.name} -> ${formatToBRL(
-              getTotalFromExpenseList("firstAmount")
+              getValuePercentage(
+                getTotalFromExpenseList("total"),
+                firstUser.percentage
+              )
             )}`}
           </Highlight>
         </ListItem>
         <ListItem>
           <Highlight
-            query={formatToBRL(getTotalFromExpenseList("secondAmount"))}
+            query={formatToBRL(
+              getValuePercentage(
+                getTotalFromExpenseList("total"),
+                secondUser.percentage
+              )
+            )}
             styles={{ color: "#59936D" }}
           >
             {`${secondUser.name} -> ${formatToBRL(
-              getTotalFromExpenseList("secondAmount")
+              getValuePercentage(
+                getTotalFromExpenseList("total"),
+                secondUser.percentage
+              )
             )}`}
           </Highlight>
         </ListItem>

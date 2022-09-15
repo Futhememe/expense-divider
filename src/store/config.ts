@@ -12,6 +12,7 @@ export interface PersonDTO {
 
 interface IConfig {
   config: ConfigDTO
+  editConfig: (config: ConfigDTO) => void
 }
 
 export const useConfigStore = create<IConfig>()((set, get) => ({
@@ -25,4 +26,5 @@ export const useConfigStore = create<IConfig>()((set, get) => ({
       percentage: 50
     }
   },
+  editConfig: (config: ConfigDTO) => set((state) => ({config: config })),
 }))
