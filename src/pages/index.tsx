@@ -1,14 +1,8 @@
 import {
   Button,
   Divider,
-  Flex,
   Heading,
-  Highlight,
-  IconButton,
-  ListItem,
-  Text,
   Tooltip,
-  UnorderedList,
   useDisclosure,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
@@ -20,9 +14,7 @@ import { ExpenseModal } from "../components/ExpenseModal";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { ExpenseDTO, useExpenseStore } from "../store";
 import { useEffect, useState } from "react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { DeleteModal } from "../components/DeleteModal";
-import { formatToBRL } from "../utils/formatters";
 import { TotalSection } from "../components/TotalSection";
 import { Expense } from "../components/Expense";
 
@@ -40,7 +32,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     setAllExpenses(storageList);
-  }, [storageList]);
+  }, [storageList, setAllExpenses]);
 
   return (
     <Container>
@@ -64,7 +56,7 @@ const Home: NextPage = () => {
         selectedId={selectedExpense ?? ""}
       />
       <Main>
-        <Heading textAlign="center">Lançamentos</Heading>
+        <Heading textAlign="center">Despesas</Heading>
         <Percentage />
         <Tooltip
           placement="bottom"
@@ -82,14 +74,14 @@ const Home: NextPage = () => {
           </Button>
         </Tooltip>
         <Divider />
-        <TotalSection />
+        {expenseList.length > 0 && <TotalSection />}
         {expenseList.map((expense) => (
           <Expense
             key={expense.id}
             name={expense.expenseName}
             total={expense.total}
-            firstAmount={expense.esther}
-            secondAmount={expense.gustavo}
+            firstAmount={expense.firstAmount}
+            secondAmount={expense.secondAmount}
             onClickEdit={() => {
               setSelectedExpense(expense.id);
               setModalMode("edit");
