@@ -96,6 +96,8 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
     rest.onClose();
   };
 
+  const handlePercentageDiff = (percentage: number) => 100 - percentage;
+
   return (
     <Modal {...rest} size={["full", "xl"]} motionPreset={"slideInBottom"}>
       <ModalOverlay />
@@ -154,6 +156,13 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
                         </InputRightElement>
                         <Input
                           {...field}
+                          max="100"
+                          onBlur={() => {
+                            setValue(
+                              "secondPerc",
+                              handlePercentageDiff(field.value)
+                            );
+                          }}
                           type="number"
                           placeholder="Porcentagem que você irá pagar"
                         />
@@ -202,6 +211,13 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
                         <Input
                           {...field}
                           type="number"
+                          max="100"
+                          onBlur={() => {
+                            setValue(
+                              "firstPerc",
+                              handlePercentageDiff(field.value)
+                            );
+                          }}
                           placeholder="Porcentagem que ele[a] irá pagar"
                         />
                       </InputGroup>
