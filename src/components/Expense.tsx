@@ -8,6 +8,7 @@ import {
   ListItem,
   UnorderedList,
 } from "@chakra-ui/react";
+import { useConfigStore } from "../store";
 
 import { formatToBRL } from "../utils/formatters";
 
@@ -28,6 +29,10 @@ export const Expense = ({
   onClickEdit,
   onClickDelete,
 }: IExpense) => {
+  const {
+    config: { firstUser, secondUser },
+  } = useConfigStore();
+
   return (
     <Flex w="100%" flexDir="column">
       <Flex justifyContent="space-between">
@@ -58,7 +63,7 @@ export const Expense = ({
             query={formatToBRL(firstAmount)}
             styles={{ color: "#59936D" }}
           >
-            {`Esther -> ${formatToBRL(firstAmount)}`}
+            {`${firstUser.name} -> ${formatToBRL(firstAmount)}`}
           </Highlight>
         </ListItem>
         <ListItem>
@@ -66,7 +71,7 @@ export const Expense = ({
             query={formatToBRL(secondAmount)}
             styles={{ color: "#59936D" }}
           >
-            {`Gustavo -> ${formatToBRL(secondAmount)}`}
+            {`${secondUser.name} -> ${formatToBRL(secondAmount)}`}
           </Highlight>
         </ListItem>
       </UnorderedList>

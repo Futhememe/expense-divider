@@ -23,6 +23,7 @@ import {
   ExpenseDTO,
   useExpenseStore,
   editExpense as generalEditExpense,
+  useConfigStore,
 } from "../store";
 import { useEffect } from "react";
 
@@ -40,6 +41,11 @@ export const ExpenseModal = ({
     "expenseList",
     []
   );
+
+  const {
+    config: { firstUser, secondUser },
+  } = useConfigStore();
+
   const { addExpense, getExpenseById, editExpense, expenseList } =
     useExpenseStore();
 
@@ -82,8 +88,8 @@ export const ExpenseModal = ({
       id: crypto.randomUUID(),
       total: amount,
       expenseName: name,
-      esther: getValuePercentage(amount, 25),
-      gustavo: getValuePercentage(amount, 75),
+      firstAmount: getValuePercentage(amount, firstUser.percentage),
+      secondAmount: getValuePercentage(amount, secondUser.percentage),
     };
 
     if (mode === "idle") {
