@@ -33,10 +33,15 @@ interface ExpenseModalProps extends Omit<ModalProps, "children"> {
 }
 
 export const ExpenseModal = ({
-  mode,
+  mode = "idle",
   selectedId,
   ...rest
 }: ExpenseModalProps) => {
+  const title = {
+    edit: "Editar despesa",
+    idle: "Nova despesa",
+  };
+
   const [storageList, setExpenses] = useLocalStorage<ExpenseDTO[]>(
     "expenseList",
     []
@@ -114,7 +119,7 @@ export const ExpenseModal = ({
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit as any)}>
-          <ModalHeader>Nova Despesa</ModalHeader>
+          <ModalHeader>{title[mode]}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>

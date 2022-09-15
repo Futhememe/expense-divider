@@ -77,7 +77,7 @@ const Home: NextPage = () => {
               onOpen();
             }}
           >
-            + lançamento
+            nova despesa
           </Button>
         </Tooltip>
         <Divider />
