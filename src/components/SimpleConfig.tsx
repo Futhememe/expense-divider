@@ -116,7 +116,8 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
               salário de vocês é só apertar no botão abaixo
             </Text>
             <Button mt="1rem" w="100%" type="button" colorScheme="green">
-              Dividir por salário
+              {/* Dividir por salário */}
+              🚧 em breve
             </Button>
             <Stack margin={2} />
             <Grid
