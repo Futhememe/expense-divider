@@ -24,6 +24,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { ConfigDTO, useConfigStore } from "../store";
+import { PercentageIcon } from "./Icons";
 
 interface SimpleConfigModalProps extends Omit<ModalProps, "children"> {}
 interface ConfigSchema {
@@ -153,7 +154,7 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
                           color="gray.300"
                           fontSize="1.2em"
                         >
-                          $
+                          <PercentageIcon />
                         </InputRightElement>
                         <Input
                           {...field}
@@ -207,7 +208,7 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
                           color="gray.300"
                           fontSize="1.2em"
                         >
-                          $
+                          <PercentageIcon />
                         </InputRightElement>
                         <Input
                           {...field}
