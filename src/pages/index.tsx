@@ -38,7 +38,16 @@ const Home: NextPage = () => {
     onClose: onConfigClose,
   } = useDisclosure();
   const [storageList] = useLocalStorage<ExpenseDTO[]>("expenseList", []);
-  const [config] = useLocalStorage<ConfigDTO>("config", {} as any);
+  const [config] = useLocalStorage<ConfigDTO>("config", {
+    firstUser: {
+      name: "Pessoa 1",
+      percentage: 50,
+    },
+    secondUser: {
+      name: "Pessoa 2",
+      percentage: 50,
+    },
+  });
   const {
     config: { firstUser, secondUser },
     editConfig,
