@@ -50,9 +50,9 @@ export const SimpleConfigModal = ({ ...rest }: SimpleConfigModalProps) => {
   const schema = yup
     .object({
       firstName: yup.string().required(),
-      firstPerc: yup.number().max(100).required(),
+      firstPerc: yup.number().min(0).max(100).required(),
       secondName: yup.string().required(),
-      secondPerc: yup.number().max(100).required(),
+      secondPerc: yup.number().min(0).max(100).required(),
     })
     .required();
 
