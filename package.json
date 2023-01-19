@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.2.9",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@expense-divider/react": "^2.2.0",
     "@hookform/resolvers": "^2.9.7",
     "date-fns": "^2.29.2",
     "framer-motion": "^6",
