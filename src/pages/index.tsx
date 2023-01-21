@@ -14,10 +14,8 @@ const Home: NextPage = () => {
       <HomeContainer>
         <Header />
         <MainContainer>
-          <Heading as="h3" size="2xl">
-            Bem-vindo ao
-          </Heading>
-          <Heading size="6xl">Expense divider</Heading>
+          <Heading as="h3">Bem-vindo ao</Heading>
+          <Heading>Expense divider</Heading>
           <Text>
             Gerencie suas contas e veja quanto cada amigo ou parceiro precisa
             pagar em cada conta sem estresse e super simples
