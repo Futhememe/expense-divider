@@ -7,7 +7,6 @@ Expenses Divider is a web application that helps you split expenses with friends
 - Easily add expenses and assign them to people
 - Calculate the total amount each person owes
 - View a summary of all expenses in one place
-- Export data to CSV for further analysis
 
 ## Installation
 
