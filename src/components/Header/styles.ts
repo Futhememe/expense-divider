@@ -8,7 +8,11 @@ export const HeaderContainer = styled('div', {
   justifyContent: 'space-between',
   borderBottom: '1px solid $colors$purple900',
 
-  padding: '$3 $6'
+  padding: '$3 $6',
+
+  '.logo': {
+    cursor: 'pointer',
+  }
 })
 
 export const ButtonsContainer = styled('div', {
