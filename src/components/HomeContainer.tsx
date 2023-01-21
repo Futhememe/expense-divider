@@ -8,6 +8,34 @@ export const HomeContainer = styled("div", {
 
   h3: {
     color: "$purple600",
+    fontSize: "$5xl",
+  },
+
+  h2: {
+    fontSize: "$9xl",
+  },
+
+  "@media(max-width: 585px)": {
+    h3: {
+      color: "$purple600",
+      fontSize: "$4xl",
+    },
+
+    h2: {
+      fontSize: "$7xl",
+      textAlign: "center",
+    },
+  },
+
+  "@media(max-width: 770px)": {
+    h3: {
+      color: "$purple600",
+      fontSize: "$4xl",
+    },
+
+    h2: {
+      fontSize: "$8xl",
+    },
   },
 });
 
