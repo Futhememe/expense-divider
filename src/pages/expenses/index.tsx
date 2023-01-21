@@ -25,7 +25,7 @@ import { Expense } from "../../components/Expense";
 import { SimpleConfigModal } from "../../components/SimpleConfig";
 import { getValuePercentage } from "../../utils/formatters";
 
-const Home: NextPage = () => {
+const Expenses: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isDeleteOpen,
@@ -135,4 +135,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Expenses;
